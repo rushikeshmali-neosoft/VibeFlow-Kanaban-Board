@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-
+    
     private static final List<TaskStatus> STATUS_ORDER = List.of(
             TaskStatus.BACKLOG,
             TaskStatus.TODO,
@@ -42,40 +42,30 @@ public class TaskService {
     private final UserRepository userRepository;
     private final TaskMapper taskMapper;
     private final ApplicationEventPublisher eventPublisher;
-
+    
     @Transactional
     public TaskDTO createTask(CreateTaskRequest request, String creatorEmail) {
         validateTitle(request.getTitle());
-
+        
         User creator = userRepository.findByEmailIgnoreCase(creatorEmail)
                 .orElseThrow(() -> new NotFoundException("Creator not found"));
-
+        
         Task task = new Task();
         task.setTitle(request.getTitle().trim());
         task.setDueDate(request.getDueDate());
         task.setCreatedBy(creator);
         task.setStatus(TaskStatus.BACKLOG);
-
-        // ── Assignee resolution (ROOT CAUSE FIX) ────────────────────────
-        // If an assigneeId is provided at creation time, look up the user
-        // and set them directly so the task card renders the name immediately.
-        if (request.getAssigneeId() != null) {
-            User assignee = userRepository.findById(request.getAssigneeId())
-                    .orElseThrow(() -> new NotFoundException(
-                            "Assignee not found with id: " + request.getAssigneeId()));
-            task.setAssignee(assignee);
-        }
-
+        
         int maxPosition = taskRepository.findMaxPositionByStatus(TaskStatus.BACKLOG);
         task.setPosition(maxPosition + 1);
-
+        
         task = taskRepository.save(task);
         TaskDTO taskDTO = taskMapper.toDTO(task);
         eventPublisher.publishEvent(TaskRealtimeEvent.taskCreated(taskDTO));
-
+        
         return taskDTO;
     }
-
+    
     @Transactional(readOnly = true)
     public List<TaskDTO> getAllTasks() {
         Map<TaskStatus, Integer> statusIndexes = buildStatusIndexes();
@@ -86,19 +76,19 @@ public class TaskService {
                 .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
+    
     @Transactional(readOnly = true)
     public TaskDTO getTaskById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found with id: " + id));
         return taskMapper.toDTO(task);
     }
-
+    
     @Transactional
     public TaskDTO updateTaskStatus(Long taskId, UpdateStatusRequest request) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("Task not found with id: " + taskId));
-
+        
         TaskStatus oldStatus = task.getStatus();
         TaskStatus newStatus = request.getStatus();
         Integer newPosition = request.getPosition();
@@ -122,15 +112,15 @@ public class TaskService {
         TaskDTO taskDTO = taskMapper.toDTO(task);
         publishTaskUpdates(sourceTasks);
         publishTaskUpdates(targetTasks);
-
+        
         return taskDTO;
     }
-
+    
     @Transactional
     public TaskDTO reorderTask(Long taskId, Integer newPosition) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("Task not found with id: " + taskId));
-
+        
         if (task.getPosition().equals(newPosition)) {
             return taskMapper.toDTO(task);
         }
@@ -144,10 +134,10 @@ public class TaskService {
 
         TaskDTO taskDTO = taskMapper.toDTO(task);
         publishTaskUpdates(tasks);
-
+        
         return taskDTO;
     }
-
+    
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new ValidationException("Title is required");

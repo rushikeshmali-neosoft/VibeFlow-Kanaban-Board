@@ -30,7 +30,6 @@ export interface BoardModel {
 export interface CreateTaskRequest {
   title: string;
   dueDate?: string | null;
-  assigneeId?: number | null;
 }
 
 export interface UpdateStatusRequest {
