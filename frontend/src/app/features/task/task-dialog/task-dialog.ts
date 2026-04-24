@@ -84,13 +84,19 @@ export class TaskDialog implements OnInit {
     }
 
     this.isBusy = true;
+    const formValue = this.createForm.getRawValue();
+
     this.taskService
       .createTask({
-        title: this.createForm.getRawValue().title ?? '',
-        dueDate: this.toDateOnly(this.createForm.getRawValue().dueDate),
+        title: formValue.title ?? '',
+        dueDate: this.toDateOnly(formValue.dueDate),
+        // ── ROOT CAUSE FIX: pass assigneeId so the backend sets the assignee
+        // immediately; the returned TaskDTO will already contain assigneeEmail
+        assigneeId: formValue.assigneeId ?? null,
       })
       .subscribe({
         next: (task) => {
+          // upsertTask updates board state with the full task (assigneeEmail included)
           this.boardStateService.upsertTask(task);
           this.snackBar.open('Task created successfully', 'Dismiss', { duration: 2500 });
           this.closeWith(task);

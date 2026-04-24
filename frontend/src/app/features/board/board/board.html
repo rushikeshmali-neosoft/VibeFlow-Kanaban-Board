@@ -45,10 +45,19 @@
               <span>{{ task.dueDate || 'No date' }}</span>
             </div>
             <div class="task-card__assignee">
-              <span class="task-card__assignee-label">by {{ task.assigneeEmail ? task.assigneeEmail.split('@')[0] : 'Unassigned' }}</span>
-              <div class="task-card__avatar">
-                <mat-icon>person</mat-icon>
-              </div>
+              <ng-container *ngIf="task.assigneeEmail; else unassignedCard">
+                <span
+                  class="task-card__avatar task-card__avatar--assigned"
+                  [matTooltip]="task.assigneeEmail"
+                >
+                  {{ task.assigneeEmail.split('@')[0].substring(0, 2).toUpperCase() }}
+                </span>
+              </ng-container>
+              <ng-template #unassignedCard>
+                <span class="task-card__avatar task-card__avatar--unassigned" matTooltip="Unassigned">
+                  <mat-icon style="font-size:13px;width:13px;height:13px">person_outline</mat-icon>
+                </span>
+              </ng-template>
             </div>
           </div>
         </article>
