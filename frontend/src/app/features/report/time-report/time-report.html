@@ -16,12 +16,12 @@
     </div>
   </header>
 
-  <div class="report-page__loading" *ngIf="!report">
+  <div class="report-page__loading" *ngIf="isLoading">
     <mat-spinner diameter="32"></mat-spinner>
     <span>Loading report...</span>
   </div>
 
-  <div class="report-table-wrapper" *ngIf="report as currentReport">
+  <div class="report-table-wrapper" *ngIf="!isLoading && report as currentReport">
     <table mat-table [dataSource]="currentReport.tasks" class="report-table">
 
       <!-- Task Title Column -->
