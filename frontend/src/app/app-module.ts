@@ -29,9 +29,11 @@ import { Board } from './features/board/board/board';
 import { TimeReport } from './features/report/time-report/time-report';
 import { TaskDialog } from './features/task/task-dialog/task-dialog';
 import { Navbar } from './layout/navbar/navbar';
+import { Sidebar } from './layout/sidebar/sidebar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [App, Navbar, Login, Register, Board, TimeReport, TaskDialog],
+  declarations: [App, Navbar, Sidebar, Login, Register, Board, TimeReport, TaskDialog],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -53,6 +55,7 @@ import { Navbar } from './layout/navbar/navbar';
     MatSnackBarModule,
     MatTableModule,
     MatToolbarModule,
+    MatTooltipModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

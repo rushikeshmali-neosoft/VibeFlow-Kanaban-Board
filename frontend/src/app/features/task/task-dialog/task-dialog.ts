@@ -34,6 +34,9 @@ export class TaskDialog implements OnInit {
 
   readonly createForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],
+    description: ['', [Validators.maxLength(1000)]],
+    status: ['BACKLOG'],
+    assigneeId: [null as number | null],
     dueDate: [null as Date | null],
   });
 

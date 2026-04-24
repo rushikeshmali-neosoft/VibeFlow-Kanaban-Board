@@ -1,98 +1,165 @@
 <section class="task-dialog" *ngIf="data.mode === 'create'; else detailMode">
   <header class="task-dialog__header">
-    <p>Create Task</p>
-    <h2>Add a task to the shared backlog</h2>
+    <h2 class="task-dialog__title">Create New Task</h2>
+    <button mat-icon-button class="task-dialog__close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
   </header>
 
   <div class="task-dialog__content">
     <form [formGroup]="createForm" class="task-dialog__form">
+
       <div class="task-dialog__form-field">
-        <label class="task-dialog__form-label">Title</label>
-        <mat-form-field appearance="outline">
-          <input matInput formControlName="title" maxlength="255" placeholder="Enter task title" />
+        <label class="task-dialog__label">
+          Title <span class="task-dialog__required">*</span>
+        </label>
+        <mat-form-field appearance="outline" class="task-dialog__input">
+          <input
+            matInput
+            formControlName="title"
+            maxlength="255"
+            placeholder="What needs to be done?"
+          />
           <mat-hint align="end">{{ createForm.get('title')?.value?.length || 0 }}/255</mat-hint>
         </mat-form-field>
       </div>
 
       <div class="task-dialog__form-field">
-        <label class="task-dialog__form-label">Due Date</label>
-        <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" placeholder="Select due date" />
-          <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #dueDatePicker></mat-datepicker>
+        <label class="task-dialog__label">Description</label>
+        <mat-form-field appearance="outline" class="task-dialog__input">
+          <textarea
+            matInput
+            formControlName="description"
+            rows="4"
+            placeholder="Provide more details about this task..."
+            maxlength="1000"
+          ></textarea>
         </mat-form-field>
       </div>
-    </form>
 
-    <footer class="task-dialog__actions">
-      <button mat-stroked-button type="button" (click)="close()">Cancel</button>
-      <button mat-flat-button color="primary" type="button" (click)="createTask()" [disabled]="isBusy">
+      <div class="task-dialog__row">
+        <div class="task-dialog__form-field">
+          <label class="task-dialog__label">Status</label>
+          <mat-form-field appearance="outline" class="task-dialog__input">
+            <mat-select formControlName="status">
+              <mat-option value="BACKLOG">Backlog</mat-option>
+              <mat-option value="TODO">To Do</mat-option>
+              <mat-option value="IN_PROGRESS">In Progress</mat-option>
+              <mat-option value="IN_REVIEW">Review</mat-option>
+              <mat-option value="DONE">Done</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="task-dialog__form-field">
+          <label class="task-dialog__label">Assignee</label>
+          <mat-form-field appearance="outline" class="task-dialog__input">
+            <mat-select formControlName="assigneeId">
+              <mat-option [value]="null">
+                <mat-icon>person_outline</mat-icon> Unassigned
+              </mat-option>
+              <mat-option *ngFor="let user of users" [value]="user.id">
+                {{ user.email }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <footer class="task-dialog__footer">
+    <div class="task-dialog__footer-hint">
+      <mat-icon class="task-dialog__hint-icon">info_outline</mat-icon>
+      <span>All changes are saved to the workspace.</span>
+    </div>
+    <div class="task-dialog__footer-actions">
+      <button mat-stroked-button type="button" class="task-dialog__cancel-btn" (click)="close()">
+        Cancel
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        class="task-dialog__submit-btn"
+        (click)="createTask()"
+        [disabled]="isBusy"
+      >
         {{ isBusy ? 'Saving...' : 'Create Task' }}
       </button>
-    </footer>
-  </div>
+    </div>
+  </footer>
 </section>
 
 <ng-template #detailMode>
   <section class="task-dialog" *ngIf="task as currentTask">
     <header class="task-dialog__header">
-      <p>{{ currentTask.status }}</p>
-      <h2>{{ currentTask.title }}</h2>
-      <div class="task-dialog__meta">
-        <div class="task-dialog__meta-item">
-          <strong>Created by:</strong> {{ currentTask.createdByEmail }}
-        </div>
-        <div class="task-dialog__meta-item">
-          <strong>Due:</strong> {{ currentTask.dueDate || 'Not set' }}
-        </div>
-        <div class="task-dialog__meta-item">
-          <strong>Assignee:</strong> {{ currentTask.assigneeEmail || 'Unassigned' }}
+      <div>
+        <div class="task-dialog__detail-id">VF-{{ currentTask.id }}</div>
+        <h2 class="task-dialog__title">{{ currentTask.title }}</h2>
+        <div class="task-dialog__meta">
+          <span class="task-dialog__meta-item">
+            <mat-icon>person</mat-icon> {{ currentTask.assigneeEmail || 'Unassigned' }}
+          </span>
+          <span class="task-dialog__meta-item">
+            <mat-icon>calendar_today</mat-icon> {{ currentTask.dueDate || 'No due date' }}
+          </span>
+          <span class="task-dialog__meta-badge task-dialog__meta-badge--{{ currentTask.status | lowercase }}">
+            {{ currentTask.status | titlecase }}
+          </span>
         </div>
       </div>
+      <button mat-icon-button class="task-dialog__close" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
     </header>
 
     <div class="task-dialog__content">
       <div class="task-dialog__grid">
         <section class="task-dialog__panel">
-          <h3>Assignment</h3>
+          <h3 class="task-dialog__panel-title">Assignment</h3>
           <form [formGroup]="assigneeForm" class="task-dialog__stack">
             <div class="task-dialog__form-field">
-              <label class="task-dialog__form-label">Assignee</label>
-              <mat-form-field appearance="outline">
+              <label class="task-dialog__label">Assignee</label>
+              <mat-form-field appearance="outline" class="task-dialog__input">
                 <mat-select formControlName="assigneeId">
                   <mat-option [value]="null">Unassigned</mat-option>
                   <mat-option *ngFor="let user of users" [value]="user.id">{{ user.email }}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-            <button mat-flat-button color="primary" type="button" (click)="saveAssignee()">Save Assignee</button>
+            <button mat-flat-button type="button" class="task-dialog__submit-btn" (click)="saveAssignee()">
+              Save Assignee
+            </button>
           </form>
         </section>
 
         <section class="task-dialog__panel">
-          <h3>Log Work</h3>
+          <h3 class="task-dialog__panel-title">Log Work</h3>
           <form [formGroup]="worklogForm" class="task-dialog__stack">
             <div class="task-dialog__form-field">
-              <label class="task-dialog__form-label">Hours</label>
-              <mat-form-field appearance="outline">
+              <label class="task-dialog__label">Hours</label>
+              <mat-form-field appearance="outline" class="task-dialog__input">
                 <input matInput type="number" step="0.01" min="0.01" formControlName="hours" placeholder="0.00" />
-                <span matTextSuffix>hours</span>
+                <span matTextSuffix>h</span>
               </mat-form-field>
             </div>
-            <button mat-flat-button color="primary" type="button" (click)="addWorklog()">Add Worklog</button>
+            <button mat-flat-button type="button" class="task-dialog__submit-btn" (click)="addWorklog()">
+              Add Worklog
+            </button>
           </form>
         </section>
       </div>
 
-      <section class="task-dialog__panel">
-        <h3>Worklogs</h3>
+      <section class="task-dialog__panel task-dialog__panel--full">
+        <h3 class="task-dialog__panel-title">Worklogs</h3>
         <div *ngIf="worklogs.length; else noWorklogs" class="task-dialog__worklog-list">
           <div class="task-dialog__worklog-item" *ngFor="let worklog of worklogs">
             <div class="task-dialog__worklog-meta">
-              <span>{{ worklog.userEmail }}</span>
-              <span>{{ worklog.createdAt | date: 'medium' }}</span>
+              <span class="task-dialog__worklog-user">{{ worklog.userEmail }}</span>
+              <span class="task-dialog__worklog-date">{{ worklog.createdAt | date: 'mediumDate' }}</span>
             </div>
-            <div class="task-dialog__worklog-hours">{{ worklog.hours | number: '1.2-2' }} hours</div>
+            <div class="task-dialog__worklog-hours">{{ worklog.hours | number: '1.1-2' }}h</div>
           </div>
         </div>
         <ng-template #noWorklogs>
@@ -100,16 +167,18 @@
         </ng-template>
       </section>
 
-      <section class="task-dialog__panel">
-        <h3>Assignment History</h3>
+      <section class="task-dialog__panel task-dialog__panel--full">
+        <h3 class="task-dialog__panel-title">Assignment History</h3>
         <div *ngIf="assignmentHistory.length; else noHistory" class="task-dialog__history-list">
           <div class="task-dialog__history-item" *ngFor="let history of assignmentHistory">
             <div class="task-dialog__history-meta">
               <span>{{ history.changedByEmail }}</span>
-              <span>{{ history.changedAt | date: 'medium' }}</span>
+              <span>{{ history.changedAt | date: 'mediumDate' }}</span>
             </div>
             <div class="task-dialog__history-change">
-              Changed from <strong>{{ history.oldAssigneeEmail || 'Unassigned' }}</strong> to <strong>{{ history.newAssigneeEmail || 'Unassigned' }}</strong>
+              <strong>{{ history.oldAssigneeEmail || 'Unassigned' }}</strong>
+              <mat-icon>arrow_forward</mat-icon>
+              <strong>{{ history.newAssigneeEmail || 'Unassigned' }}</strong>
             </div>
           </div>
         </div>

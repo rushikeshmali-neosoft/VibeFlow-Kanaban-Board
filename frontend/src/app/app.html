@@ -1,11 +1,16 @@
 <div class="app-shell">
   <app-navbar *ngIf="showNavbar"></app-navbar>
 
-  <main class="app-shell__content" [class.app-shell__content--auth]="!showNavbar">
+  <div class="app-shell__body" [class.app-shell__body--auth]="!showNavbar">
     <div class="app-shell__loading" *ngIf="!isBootstrapped">
       <mat-spinner diameter="44"></mat-spinner>
     </div>
 
-    <router-outlet *ngIf="isBootstrapped"></router-outlet>
-  </main>
+    <ng-container *ngIf="isBootstrapped">
+      <app-sidebar *ngIf="showNavbar"></app-sidebar>
+      <main class="app-shell__content">
+        <router-outlet></router-outlet>
+      </main>
+    </ng-container>
+  </div>
 </div>

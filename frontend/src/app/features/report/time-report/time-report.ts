@@ -28,6 +28,23 @@ export class TimeReport implements OnInit {
       .subscribe(() => this.loadReport());
   }
 
+  exportCsv(): void {
+    if (!this.report) return;
+    const rows = [
+      ['Task Title', 'Status', 'Assignee', 'Total Hours'],
+      ...this.report.tasks.map((t) => [t.title, t.status, t.assignee || 'Unassigned', t.totalHours]),
+      ['Grand Total', '', '', this.report.grandTotal],
+    ];
+    const csv = rows.map((r) => r.map(String).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'time-report.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   private loadReport(): void {
     this.reportService.getTimeReport().subscribe((report) => {
       this.report = report;
