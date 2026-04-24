@@ -25,8 +25,8 @@ describe('Sidebar Component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have 4 menu items', () => {
-    expect(component.menuItems.length).toBe(4);
+  it('should have 3 menu items', () => {
+    expect(component.menuItems.length).toBe(3);
   });
 
   it('should have Board as the first menu item', () => {
@@ -41,10 +41,6 @@ describe('Sidebar Component', () => {
 
   it('should have Teams as third menu item', () => {
     expect(component.menuItems[2].label).toBe('Teams');
-  });
-
-  it('should have Settings as fourth menu item', () => {
-    expect(component.menuItems[3].label).toBe('Settings');
   });
 
   it('should set active state based on current route', () => {
@@ -64,7 +60,7 @@ describe('Sidebar Component', () => {
   it('should render menu items in the template', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const menuItems = compiled.querySelectorAll('.sidebar__menu-item');
-    expect(menuItems.length).toBe(4);
+    expect(menuItems.length).toBe(3);
   });
 
   it('should apply active class to active menu item', () => {

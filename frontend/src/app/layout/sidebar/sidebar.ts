@@ -12,7 +12,6 @@ export class Sidebar {
     { label: 'Board', icon: 'dashboard', route: '/board', active: false },
     { label: 'Time Reports', icon: 'bar_chart', route: '/reports/time', active: false },
     { label: 'Teams', icon: 'groups', route: '/teams', active: false },
-    { label: 'Settings', icon: 'settings', route: '/settings', active: false },
   ];
 
   constructor(private router: Router) {
