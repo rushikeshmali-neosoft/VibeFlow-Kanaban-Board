@@ -45,7 +45,7 @@
               <span>{{ task.dueDate || 'No date' }}</span>
             </div>
             <div class="task-card__assignee">
-              <span class="task-card__assignee-label">by {{ task.assigneeEmail?.split('@')[0] || 'Unassigned' }}</span>
+              <span class="task-card__assignee-label">by {{ task.assigneeEmail ? task.assigneeEmail.split('@')[0] : 'Unassigned' }}</span>
               <div class="task-card__avatar">
                 <mat-icon>person</mat-icon>
               </div>

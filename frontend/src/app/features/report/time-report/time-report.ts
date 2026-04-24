@@ -16,6 +16,19 @@ export class TimeReport implements OnInit {
   report?: TimeReportModel;
   private readonly destroyRef = inject(DestroyRef);
 
+  /** Returns a CSS-safe class suffix for a given TaskStatus string */
+  getStatusClass(status: string): string {
+    return (status || '').toLowerCase().replace(/_/g, '-');
+  }
+
+  /** Returns a human-readable label for a given TaskStatus string */
+  getStatusLabel(status: string): string {
+    return (status || '')
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
   constructor(
     private readonly reportService: ReportService,
     private readonly websocketService: WebsocketService,
