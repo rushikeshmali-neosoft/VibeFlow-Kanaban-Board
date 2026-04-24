@@ -1,18 +1,18 @@
 <div class="app-shell">
+  <!-- Sticky header – always rendered so it doesn't cause re-mounts -->
   <app-navbar *ngIf="showNavbar"></app-navbar>
 
   <div class="app-shell__body" [class.app-shell__body--auth]="!showNavbar">
-    <!-- Sidebar and content are always in the DOM once body renders.
-         The loading overlay is positioned absolutely so layout never re-mounts. -->
     <app-sidebar *ngIf="showNavbar"></app-sidebar>
 
-    <main class="app-shell__content">
-      <!-- Full-screen loading overlay – only visible until bootstrap completes -->
+    <main class="app-shell__content" role="main">
+      <!-- Full-screen loading overlay while session is being restored -->
       <div class="app-shell__loading" *ngIf="!isBootstrapped">
-        <mat-spinner diameter="40"></mat-spinner>
+        <mat-spinner diameter="36"></mat-spinner>
+        <p>Loading workspace…</p>
       </div>
 
-      <!-- Router outlet is always present; Angular reuses the component instance -->
+      <!-- Router outlet is stable — never destroyed by the loading overlay -->
       <router-outlet *ngIf="isBootstrapped"></router-outlet>
     </main>
   </div>

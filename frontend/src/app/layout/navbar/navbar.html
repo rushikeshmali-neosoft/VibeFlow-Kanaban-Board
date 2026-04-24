@@ -1,30 +1,102 @@
-<mat-toolbar class="navbar">
-  <div class="navbar__left">
-    <a class="navbar__brand" routerLink="/board">
-      <span class="navbar__logo-text">VibeFlow</span>
+<header class="vf-header">
+
+  <!-- ── Left: Brand + Search ─────────────────────────────── -->
+  <div class="vf-header__left">
+
+    <!-- Brand -->
+    <a class="vf-header__brand" routerLink="/board" aria-label="VibeFlow home">
+      <div class="vf-header__logo">
+        <span class="vf-header__logo-icon">
+          <mat-icon>view_kanban</mat-icon>
+        </span>
+      </div>
+      <div class="vf-header__brand-text">
+        <span class="vf-header__brand-name">VibeFlow</span>
+        <span class="vf-header__brand-badge">PRO</span>
+      </div>
     </a>
-    <div class="navbar__search">
-      <mat-icon class="navbar__search-icon">search</mat-icon>
-      <input class="navbar__search-input" type="text" placeholder="Search tasks, assignees, or keywords..." />
+
+    <!-- Divider -->
+    <div class="vf-header__divider"></div>
+
+    <!-- Search -->
+    <div class="vf-header__search" role="search">
+      <mat-icon class="vf-header__search-icon">search</mat-icon>
+      <input
+        id="global-search"
+        class="vf-header__search-input"
+        type="text"
+        placeholder="Search tasks, people, projects…"
+        autocomplete="off"
+      />
+      <kbd class="vf-header__search-kbd">⌘K</kbd>
     </div>
   </div>
 
-  <div class="navbar__right">
-    <button mat-flat-button class="navbar__create-btn" (click)="openCreateTask()">
+  <!-- ── Right: Actions + User ─────────────────────────────── -->
+  <div class="vf-header__right">
+
+    <!-- Create Task CTA -->
+    <button
+      class="vf-header__create-btn"
+      (click)="openCreateTask()"
+      id="create-task-btn"
+      type="button"
+    >
       <mat-icon>add</mat-icon>
-      Create New Task
+      <span>Create Task</span>
     </button>
-    <button mat-icon-button class="navbar__icon-btn">
-      <mat-icon>notifications</mat-icon>
+
+    <!-- Notifications -->
+    <button class="vf-header__icon-btn" matTooltip="Notifications" type="button" id="notifications-btn">
+      <mat-icon>notifications_none</mat-icon>
+      <span class="vf-header__badge">3</span>
     </button>
-    <div class="navbar__user" *ngIf="currentUser$ | async as user">
-      <div class="navbar__user-avatar">
-        <mat-icon>person</mat-icon>
+
+    <!-- Help -->
+    <button class="vf-header__icon-btn" matTooltip="Help & Documentation" type="button" id="help-btn">
+      <mat-icon>help_outline</mat-icon>
+    </button>
+
+    <!-- User Section -->
+    <div class="vf-header__user" *ngIf="currentUser$ | async as user">
+      <div class="vf-header__user-divider"></div>
+      <div class="vf-header__avatar-wrap" [matMenuTriggerFor]="userMenu">
+        <div class="vf-header__avatar">
+          {{ getUserInitials(user.email) }}
+        </div>
+        <div class="vf-header__user-info">
+          <span class="vf-header__user-name">{{ getUserDisplayName(user.email) }}</span>
+          <span class="vf-header__user-role">Administrator</span>
+        </div>
+        <mat-icon class="vf-header__chevron">expand_more</mat-icon>
       </div>
-      <span class="navbar__user-name">{{ user.email }}</span>
-      <button mat-icon-button class="navbar__logout-btn" (click)="logout()" matTooltip="Logout">
-        <mat-icon>logout</mat-icon>
-      </button>
+
+      <!-- User dropdown menu -->
+      <mat-menu #userMenu="matMenu" class="vf-user-menu" xPosition="before">
+        <div class="vf-user-menu__header">
+          <div class="vf-user-menu__avatar">{{ getUserInitials(user.email) }}</div>
+          <div class="vf-user-menu__info">
+            <div class="vf-user-menu__name">{{ getUserDisplayName(user.email) }}</div>
+            <div class="vf-user-menu__email">{{ user.email }}</div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item id="profile-menu-item">
+          <mat-icon>person_outline</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item id="settings-menu-item">
+          <mat-icon>settings</mat-icon>
+          <span>Workspace Settings</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item class="vf-user-menu__logout" (click)="logout()" id="logout-menu-item">
+          <mat-icon>logout</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      </mat-menu>
     </div>
+
   </div>
-</mat-toolbar>
+</header>

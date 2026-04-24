@@ -24,6 +24,27 @@ export class Navbar {
     this.currentUser$ = this.authService.currentUser$;
   }
 
+  /** Returns uppercase initials from an email, e.g. john.doe@... → JD */
+  getUserInitials(email: string): string {
+    if (!email) return '?';
+    const name = email.split('@')[0];
+    const parts = name.split(/[._-]/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  }
+
+  /** Returns display name from email, e.g. john.doe@... → John Doe */
+  getUserDisplayName(email: string): string {
+    if (!email) return 'User';
+    const name = email.split('@')[0];
+    return name
+      .split(/[._-]/)
+      .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+      .join(' ');
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
@@ -32,8 +53,10 @@ export class Navbar {
   openCreateTask(): void {
     this.dialog
       .open(TaskDialog, {
-        width: '42rem',
+        width: '520px',
+        maxWidth: '95vw',
         data: { mode: 'create' },
+        panelClass: 'vf-dialog',
       })
       .afterClosed()
       .subscribe((task?: TaskModel) => {

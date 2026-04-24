@@ -1,38 +1,42 @@
+/* ── VibeFlow Enterprise Sidebar ─────────────────────────────── */
+
 .sidebar {
-  width: 220px;
-  min-width: 220px;
-  height: 100%;
-  min-height: calc(100vh - 64px);
-  background: #ffffff;
-  border-right: 1px solid #e8e8e8;
+  width: var(--sidebar-width, 230px);
+  min-width: var(--sidebar-width, 230px);
+  min-height: calc(100vh - var(--header-height, 64px));
+  background: #fff;
+  border-right: 1px solid var(--color-border, #e4e6ef);
   display: flex;
   flex-direction: column;
   padding: 0;
   position: sticky;
-  top: 64px;
+  top: var(--header-height, 64px);
+  align-self: flex-start;
 
   &__logo-area {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 20px 16px 16px;
-    border-bottom: 1px solid #f0f0f0;
+    gap: 10px;
+    padding: 16px 16px 14px;
+    border-bottom: 1px solid var(--color-border-light, #f0f1f5);
   }
 
   &__logo-icon {
-    width: 36px;
-    height: 36px;
-    background: #f0f0f0;
+    width: 32px;
+    height: 32px;
     border-radius: 8px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(79,70,229,0.25);
 
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      color: #555;
+      font-size: 17px !important;
+      width: 17px !important;
+      height: 17px !important;
+      color: #fff;
     }
   }
 
@@ -40,70 +44,89 @@
     display: flex;
     flex-direction: column;
     line-height: 1.2;
+    min-width: 0;
   }
 
   &__app-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #111;
-    letter-spacing: 0.01em;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   &__app-sub {
-    font-size: 11px;
-    color: #888;
-    font-weight: 400;
+    font-size: 10px;
+    color: var(--color-text-muted, #9da3b4);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__section-label {
+    padding: 16px 16px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #9da3b4);
   }
 
   &__menu {
     list-style: none;
-    margin: 12px 0 0;
-    padding: 0 8px;
+    padding: 8px 8px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
+    flex: 1;
   }
 
   &__menu-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
-    border-radius: 6px;
+    padding: 9px 12px;
+    border-radius: 9px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 500;
-    color: #555;
-    position: relative;
-    transition: background 150ms ease, color 150ms ease;
+    color: var(--color-text-secondary, #5a607f);
+    transition: background var(--transition-fast, 120ms), color var(--transition-fast, 120ms);
     user-select: none;
 
-    &:hover {
-      background: #f5f5f5;
-      color: #111;
+    &:hover:not(.sidebar__menu-item--active) {
+      background: var(--color-surface-alt, #f3f4f8);
+      color: var(--color-text-primary, #1a1d2e);
     }
 
     &--active {
-      background: #f0f0f0;
-      color: #111;
+      background: rgba(79, 70, 229, 0.08);
+      color: #4f46e5;
       font-weight: 600;
     }
   }
 
   &__menu-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
     color: inherit;
-    opacity: 0.7;
+    flex-shrink: 0;
+    opacity: 0.8;
 
     .sidebar__menu-item--active & {
       opacity: 1;
+      color: #4f46e5;
     }
   }
 
   &__menu-label {
     flex: 1;
+    line-height: 1;
   }
 
   &__active-bar {
@@ -113,7 +136,18 @@
     transform: translateY(-50%);
     width: 3px;
     height: 20px;
-    background: #111;
-    border-radius: 0 2px 2px 0;
+    background: #4f46e5;
+    border-radius: 0 3px 3px 0;
+  }
+
+  // ── Footer ──────────────────────────────────────────────────
+  &__footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--color-border-light, #f0f1f5);
+    font-size: 11px;
+    color: var(--color-text-muted, #9da3b4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
