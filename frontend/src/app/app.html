@@ -2,15 +2,18 @@
   <app-navbar *ngIf="showNavbar"></app-navbar>
 
   <div class="app-shell__body" [class.app-shell__body--auth]="!showNavbar">
-    <div class="app-shell__loading" *ngIf="!isBootstrapped">
-      <mat-spinner diameter="44"></mat-spinner>
-    </div>
+    <!-- Sidebar and content are always in the DOM once body renders.
+         The loading overlay is positioned absolutely so layout never re-mounts. -->
+    <app-sidebar *ngIf="showNavbar"></app-sidebar>
 
-    <ng-container *ngIf="isBootstrapped">
-      <app-sidebar *ngIf="showNavbar"></app-sidebar>
-      <main class="app-shell__content">
-        <router-outlet></router-outlet>
-      </main>
-    </ng-container>
+    <main class="app-shell__content">
+      <!-- Full-screen loading overlay – only visible until bootstrap completes -->
+      <div class="app-shell__loading" *ngIf="!isBootstrapped">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <!-- Router outlet is always present; Angular reuses the component instance -->
+      <router-outlet *ngIf="isBootstrapped"></router-outlet>
+    </main>
   </div>
 </div>

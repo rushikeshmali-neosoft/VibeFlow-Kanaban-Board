@@ -1,5 +1,5 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { BoardStateService } from '../../../core/services/board-state';
@@ -11,6 +11,7 @@ import { TaskDialog } from '../../task/task-dialog/task-dialog';
 @Component({
   selector: 'app-board',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -27,6 +28,7 @@ export class Board implements OnInit {
   ];
   tasks: TaskModel[] = [];
   columnTaskMap: Record<TaskStatus, TaskModel[]> = this.createEmptyColumnTaskMap();
+  /** True only while the initial /board API call is in-flight */
   isLoading = true;
 
   private readonly destroyRef = inject(DestroyRef);
@@ -58,6 +60,7 @@ export class Board implements OnInit {
     private readonly taskService: TaskService,
     private readonly userService: UserService,
     private readonly dialog: MatDialog,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +69,7 @@ export class Board implements OnInit {
       .subscribe((columns) => {
         this.columns = columns;
         this.rebuildTasksByColumn(this.tasks);
+        this.cdr.markForCheck();
       });
 
     this.boardStateService.tasks$
@@ -73,11 +77,10 @@ export class Board implements OnInit {
       .subscribe((tasks) => {
         this.tasks = tasks;
         this.rebuildTasksByColumn(tasks);
-        if (this.isLoading && tasks.length > 0) {
-          this.isLoading = false;
-        }
+        this.cdr.markForCheck();
       });
 
+    // Kick off the API fetch — isLoading is cleared in loadBoard()
     this.loadBoard();
   }
 
@@ -134,9 +137,11 @@ export class Board implements OnInit {
       next: (board) => {
         this.boardStateService.setBoard(board);
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
     });
 
