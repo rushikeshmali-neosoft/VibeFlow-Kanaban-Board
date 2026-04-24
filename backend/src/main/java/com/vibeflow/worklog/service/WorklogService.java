@@ -25,72 +25,78 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class WorklogService {
-    
+
     private final WorklogRepository worklogRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final WorklogMapper worklogMapper;
     private final TaskMapper taskMapper;
     private final ApplicationEventPublisher eventPublisher;
-    
+
     @Transactional
     public WorklogDTO createWorklog(Long taskId, CreateWorklogRequest request, String userEmail) {
         validateWorklog(request);
-        
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("Task not found with id: " + taskId));
-        
+
         User user = userRepository.findByEmailIgnoreCase(userEmail)
                 .orElseThrow(() -> new NotFoundException("User not found with email: " + userEmail));
-        
+
         Worklog worklog = new Worklog();
         worklog.setTask(task);
         worklog.setUser(user);
         worklog.setHours(request.getHours());
-        
+
         Worklog savedWorklog = worklogRepository.save(worklog);
         eventPublisher.publishEvent(TaskRealtimeEvent.worklogAdded(taskMapper.toDTO(task)));
         return worklogMapper.toDto(savedWorklog);
     }
-    
+
     @Transactional(readOnly = true)
     public List<WorklogDTO> getWorklogsByTaskId(Long taskId) {
         if (!taskRepository.existsById(taskId)) {
             throw new NotFoundException("Task not found with id: " + taskId);
         }
-        
         return worklogRepository.findByTaskIdOrderByCreatedAtDesc(taskId).stream()
                 .map(worklogMapper::toDto)
                 .collect(Collectors.toList());
     }
-    
+
     @Transactional(readOnly = true)
     public BigDecimal getTotalHoursByTaskId(Long taskId) {
         if (!taskRepository.existsById(taskId)) {
             throw new NotFoundException("Task not found with id: " + taskId);
         }
-        
         BigDecimal total = worklogRepository.sumHoursByTaskId(taskId);
         return total != null ? total : BigDecimal.ZERO;
     }
-    
+
     @Transactional(readOnly = true)
     public BigDecimal getGrandTotalHours() {
         BigDecimal total = worklogRepository.sumTotalHours();
         return total != null ? total : BigDecimal.ZERO;
     }
-    
+
+    // ── Validation ────────────────────────────────────────────
+
     private void validateWorklog(CreateWorklogRequest request) {
         if (request.getHours() == null) {
             throw new ValidationException("Hours are required");
         }
-        
+
         if (request.getHours().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ValidationException("Hours must be greater than 0");
         }
-        
-        if (request.getHours().compareTo(new BigDecimal("999.99")) > 0) {
-            throw new ValidationException("Hours cannot exceed 999.99");
+
+        // A single worklog entry cannot exceed 24 hours (one calendar day)
+        if (request.getHours().compareTo(new BigDecimal("24")) > 0) {
+            throw new ValidationException("Hours per entry cannot exceed 24");
+        }
+
+        // Enforce at most 2 decimal places (e.g. 1.25 is fine, 1.125 is not)
+        if (request.getHours().stripTrailingZeros().scale() > 2) {
+            throw new ValidationException("Hours can have at most 2 decimal places (e.g. 1.50)");
         }
     }
 }

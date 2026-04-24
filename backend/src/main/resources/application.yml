@@ -1,26 +1,27 @@
 spring:
   application:
     name: vibeflow-kanban
-  
+
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/vibeflow_db}
     username: ${DB_USERNAME:vibeflow}
     password: ${DB_PASSWORD:vibeflow}
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     hibernate:
+      # 'update' automatically creates the token_blacklist table on first boot
       ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true
+    show-sql: false   # set to true for debugging only; avoid in production
 
 server:
   port: 8080
-  
+
   error:
     include-message: always
     include-binding-errors: always
@@ -35,10 +36,10 @@ springdoc:
 
 logging:
   level:
-    com.vibeflow: DEBUG
-    org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.vibeflow: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
 
 management:
   endpoints:
@@ -50,12 +51,15 @@ management:
       show-details: always
 
 jwt:
-  secret: ${JWT_SECRET:change-this-secret-key-to-a-long-random-value-1234567890}
-  expiration: ${JWT_EXPIRATION:86400000}
+  # Must be >= 32 characters (256 bits) for HMAC-SHA256.
+  # Override with the JWT_SECRET environment variable in production.
+  # The default below satisfies the length requirement for local dev only.
+  secret: ${JWT_SECRET:vibeflow-enterprise-jwt-secret-key-min-256bits-dev}
+  # 8 hours in milliseconds (down from 24h to limit exposure window)
+  expiration: ${JWT_EXPIRATION:28800000}
 
 cors:
   allowed-origins: http://localhost:4200,http://localhost:3000
   allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowed-headers: "*"
   allow-credentials: true
-

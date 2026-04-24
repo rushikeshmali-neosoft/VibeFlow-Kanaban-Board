@@ -1,5 +1,6 @@
 package com.vibeflow.auth.security;
 
+import com.vibeflow.auth.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,43 +16,60 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Validates the JWT on every request and checks it against the token blacklist.
+ * If a token has been blacklisted (i.e. the user logged out), the request is
+ * rejected even though the JWT signature is still cryptographically valid.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
+
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
-    
+    private final TokenBlacklistService tokenBlacklistService;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                   HttpServletResponse response, 
-                                   FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
-            String jwt = getJwtFromRequest(request);
-            
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt, 
-                    userDetailsService.loadUserByUsername(jwtTokenProvider.extractUsername(jwt)))) {
-                
+            String jwt = extractBearerToken(request);
+
+            if (StringUtils.hasText(jwt)) {
+
+                // ── 1. Blacklist check (fast DB lookup by hash) ──────
+                if (tokenBlacklistService.isBlacklisted(jwt)) {
+                    logger.warn("Rejected blacklisted token for request: " + request.getRequestURI());
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                // ── 2. Signature + expiry validation ─────────────────
                 String username = jwtTokenProvider.extractUsername(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                if (jwtTokenProvider.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
+            logger.error("Could not set user authentication in security context: " + ex.getMessage());
         }
-        
+
         filterChain.doFilter(request, response);
     }
-    
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+
+    private String extractBearerToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+            return header.substring(7);
         }
         return null;
     }
