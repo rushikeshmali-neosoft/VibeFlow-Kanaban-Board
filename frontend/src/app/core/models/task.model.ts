@@ -29,6 +29,8 @@ export interface BoardModel {
 
 export interface CreateTaskRequest {
   title: string;
+  status?: string | null;
+  assigneeId?: number | null;
   dueDate?: string | null;
 }
 

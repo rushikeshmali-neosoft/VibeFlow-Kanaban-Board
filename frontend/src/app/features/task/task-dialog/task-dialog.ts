@@ -84,10 +84,14 @@ export class TaskDialog implements OnInit {
     }
 
     this.isBusy = true;
+    const { title, dueDate, assigneeId, status } = this.createForm.getRawValue();
+
     this.taskService
       .createTask({
-        title: this.createForm.getRawValue().title ?? '',
-        dueDate: this.toDateOnly(this.createForm.getRawValue().dueDate),
+        title: title ?? '',
+        status: status ?? 'BACKLOG',
+        assigneeId: assigneeId ?? null,
+        dueDate: this.toDateOnly(dueDate),
       })
       .subscribe({
         next: (task) => {
@@ -100,6 +104,7 @@ export class TaskDialog implements OnInit {
         },
       });
   }
+
 
   saveAssignee(): void {
     if (!this.task) {

@@ -46,23 +46,31 @@ public class TaskService {
     @Transactional
     public TaskDTO createTask(CreateTaskRequest request, String creatorEmail) {
         validateTitle(request.getTitle());
-        
+
         User creator = userRepository.findByEmailIgnoreCase(creatorEmail)
                 .orElseThrow(() -> new NotFoundException("Creator not found"));
-        
+
         Task task = new Task();
         task.setTitle(request.getTitle().trim());
         task.setDueDate(request.getDueDate());
         task.setCreatedBy(creator);
         task.setStatus(TaskStatus.BACKLOG);
-        
+
+        // Resolve and set assignee if provided at creation time
+        if (request.getAssigneeId() != null) {
+            User assignee = userRepository.findById(request.getAssigneeId())
+                    .orElseThrow(() -> new NotFoundException(
+                            "Assignee not found with id: " + request.getAssigneeId()));
+            task.setAssignee(assignee);
+        }
+
         int maxPosition = taskRepository.findMaxPositionByStatus(TaskStatus.BACKLOG);
         task.setPosition(maxPosition + 1);
-        
+
         task = taskRepository.save(task);
         TaskDTO taskDTO = taskMapper.toDTO(task);
         eventPublisher.publishEvent(TaskRealtimeEvent.taskCreated(taskDTO));
-        
+
         return taskDTO;
     }
     

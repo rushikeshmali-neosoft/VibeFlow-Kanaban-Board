@@ -12,10 +12,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateTaskRequest {
-    
+
     @NotBlank(message = "Title is required")
     @Size(max = 255, message = "Title must be at most 255 characters")
     private String title;
-    
+
     private LocalDate dueDate;
+
+    /**
+     * Optional assignee at creation time.
+     * When provided, the task is immediately assigned without a separate PATCH call.
+     */
+    private Long assigneeId;
 }
