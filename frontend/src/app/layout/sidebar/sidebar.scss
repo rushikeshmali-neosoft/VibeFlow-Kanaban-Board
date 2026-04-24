@@ -109,39 +109,6 @@ $transition: 260ms cubic-bezier(.4, 0, .2, 1);
     text-overflow: ellipsis;
   }
 
-  // ── Toggle button ────────────────────────────────────────
-  &__toggle-btn {
-    flex-shrink: 0;
-    margin-left: auto;
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #555;
-    transition: background var(--transition-fast, 120ms), color var(--transition-fast, 120ms),
-                border-color var(--transition-fast, 120ms), transform $transition;
-
-    &:hover {
-      background: #f3f4f6;
-      border-color: #ccc;
-      color: #111;
-    }
-
-    &:active { transform: scale(0.92); }
-  }
-
-  &__toggle-icon {
-    font-size: 16px !important;
-    width: 16px !important;
-    height: 16px !important;
-    transition: transform $transition;
-  }
-
   // ── Menu ─────────────────────────────────────────────────
   &__menu {
     list-style: none;
