@@ -89,6 +89,8 @@ export class Board implements OnInit {
       .open(TaskDialog, {
         width: '42rem',
         data: { mode: 'create' },
+        backdropClass: 'vf-dialog-backdrop',
+        panelClass: 'vf-dialog-panel',
       })
       .afterClosed()
       .subscribe((task?: TaskModel) => {
@@ -102,6 +104,8 @@ export class Board implements OnInit {
     this.dialog.open(TaskDialog, {
       width: '48rem',
       data: { taskId: task.id, mode: 'detail' },
+      backdropClass: 'vf-dialog-backdrop',
+      panelClass: 'vf-dialog-panel',
     });
   }
 

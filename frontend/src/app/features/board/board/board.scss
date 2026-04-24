@@ -135,6 +135,9 @@
   transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms;
   position: relative;
 
+  // Fade-in when card enters the DOM
+  animation: fadeIn 0.3s ease-in;
+
   &:hover {
     box-shadow: 0 4px 14px rgba(0,0,0,0.09);
     transform: translateY(-1px);

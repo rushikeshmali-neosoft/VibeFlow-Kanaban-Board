@@ -55,7 +55,7 @@ export class TaskDialog implements OnInit {
     private readonly boardStateService: BoardStateService,
     private readonly websocketService: WebsocketService,
     private readonly snackBar: MatSnackBar,
-  ) {}
+  ) { }
 
   close(): void {
     this.dialogRef.close();

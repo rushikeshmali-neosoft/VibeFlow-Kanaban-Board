@@ -62,7 +62,8 @@ export class Navbar {
         width: '520px',
         maxWidth: '95vw',
         data: { mode: 'create' },
-        panelClass: 'vf-dialog',
+        panelClass: ['vf-dialog', 'vf-dialog-panel'],
+        backdropClass: 'vf-dialog-backdrop',
       })
       .afterClosed()
       .subscribe((task?: TaskModel) => {

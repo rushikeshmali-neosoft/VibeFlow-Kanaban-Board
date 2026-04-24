@@ -11,6 +11,7 @@
 
 /* ── Design Tokens ──────────────────────────────────────────── */
 :root {
+
   /* Brand – Black & White */
   --brand-primary:   #111111;
   --brand-secondary: #333333;
@@ -217,4 +218,52 @@ mat-icon {
   &--done        { background: #111;    color: #fff;    }
   &--blocked     { background: #fee2e2; color: #991b1b; }
   &--cancelled   { background: #f3f4f6; color: #6b7280; }
+}
+
+/* ── Fade-In Animation ──────────────────────────────────────── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* ── Dialog Backdrop – blurred overlay ──────────────────────── */
+/*
+ * Applied via backdropClass: 'vf-dialog-backdrop' in MatDialog.open()
+ * Must live in global styles.scss (not component SCSS) because
+ * Angular Material renders the backdrop outside the component's shadow.
+ */
+.vf-dialog-backdrop {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ── Dialog Panel – slide-in ────────────────────────────────── */
+/*
+ * Applied via panelClass: 'vf-dialog-panel'
+ * The panel wraps the mat-dialog-container and must also live globally.
+ */
+.vf-dialog-panel {
+  animation: dialogSlideIn 0.28s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
