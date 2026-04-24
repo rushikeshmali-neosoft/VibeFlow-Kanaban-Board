@@ -1,0 +1,30 @@
+<mat-toolbar class="navbar">
+  <div class="navbar__left">
+    <a class="navbar__brand" routerLink="/board">
+      <span class="navbar__logo-text">VibeFlow</span>
+    </a>
+    <div class="navbar__search">
+      <mat-icon class="navbar__search-icon">search</mat-icon>
+      <input class="navbar__search-input" type="text" placeholder="Search tasks, assignees, or keywords..." />
+    </div>
+  </div>
+
+  <div class="navbar__right">
+    <button mat-flat-button class="navbar__create-btn" (click)="openCreateTask()">
+      <mat-icon>add</mat-icon>
+      Create New Task
+    </button>
+    <button mat-icon-button class="navbar__icon-btn">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <div class="navbar__user" *ngIf="currentUser$ | async as user">
+      <div class="navbar__user-avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+      <span class="navbar__user-name">{{ user.email }}</span>
+      <button mat-icon-button class="navbar__logout-btn" (click)="logout()" matTooltip="Logout">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vibeflow-postgres
+    environment:
+      POSTGRES_DB: vibeflow_db
+      POSTGRES_USER: vibeflow
+      POSTGRES_PASSWORD: vibeflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - vibeflow-postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: vibeflow-backend
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/vibeflow_db
+      DB_USERNAME: vibeflow
+      DB_PASSWORD: vibeflow
+      JWT_SECRET: change-this-secret-key-to-a-long-random-value-1234567890
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: vibeflow-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  vibeflow-postgres-data:

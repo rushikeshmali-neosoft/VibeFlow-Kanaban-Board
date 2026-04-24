@@ -1,0 +1,199 @@
+.task-dialog {
+  display: grid;
+  gap: 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 16px;
+  padding: 0;
+}
+
+.task-dialog__header {
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 16px 16px 0 0;
+}
+
+.task-dialog__header p {
+  margin: 0 0 0.5rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.task-dialog__header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  background: linear-gradient(90deg, #f8fafc 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.task-dialog__meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.task-dialog__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-dialog__meta-item strong {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.task-dialog__content {
+  padding: 0 2rem 2rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.task-dialog__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.task-dialog__panel {
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.7);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.task-dialog__panel h3 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-dialog__panel h3::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #60a5fa;
+  border-radius: 50%;
+}
+
+.task-dialog__stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.task-dialog__form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.task-dialog__form-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.task-dialog__form-label {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.task-dialog__history-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-dialog__history-item {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #60a5fa;
+}
+
+.task-dialog__history-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-dialog__history-change {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.task-dialog__worklog-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-dialog__worklog-item {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+}
+
+.task-dialog__worklog-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-dialog__worklog-hours {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.task-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.task-dialog__empty {
+  margin: 0;
+  color: #64748b;
+  font-style: italic;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+@media (max-width: 720px) {
+  .task-dialog__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .task-dialog__meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .task-dialog__header,
+  .task-dialog__content {
+    padding: 1.5rem;
+  }
+}

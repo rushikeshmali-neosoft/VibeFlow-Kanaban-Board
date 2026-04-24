@@ -1,0 +1,64 @@
+<section class="board-page">
+  <header class="board-page__header">
+    <div>
+      <p class="board-page__eyebrow">Shared Board</p>
+      <h1>VibeFlow Kanban workspace</h1>
+      <p class="board-page__copy">
+        Every authenticated user sees the same task stream, the same column order, and the same live updates.
+      </p>
+    </div>
+
+    <button mat-flat-button type="button" (click)="openCreateTask()">Create Task</button>
+  </header>
+
+  <div class="board-page__loading" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Syncing board...</span>
+  </div>
+
+  <div class="board-columns" cdkDropListGroup>
+    <section
+      class="board-column"
+      *ngFor="let column of columns; trackBy: trackByColumn"
+      [style.--column-accent]="columnAccent[column]"
+    >
+      <header class="board-column__header">
+        <div>
+          <span class="board-column__label">{{ columnLabels[column] }}</span>
+          <strong>{{ columnTaskMap[column].length }}</strong>
+        </div>
+      </header>
+
+      <div
+        class="board-column__list"
+        cdkDropList
+        [cdkDropListData]="columnTaskMap[column]"
+        (cdkDropListDropped)="drop($event, column)"
+      >
+        <article
+          class="task-card"
+          *ngFor="let task of columnTaskMap[column]; trackBy: trackByTask"
+          cdkDrag
+          [cdkDragData]="task"
+          (click)="openTask(task)"
+        >
+          <h2>{{ task.title }}</h2>
+          <dl>
+            <div>
+              <dt>Assignee</dt>
+              <dd>{{ task.assigneeEmail || 'Unassigned' }}</dd>
+            </div>
+            <div>
+              <dt>Due Date</dt>
+              <dd>{{ task.dueDate || 'None' }}</dd>
+            </div>
+            <div>
+              <dt>Created By</dt>
+              <dd>{{ task.createdByEmail || '-' }}</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+    </section>
+  </div>
+</section>

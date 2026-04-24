@@ -1,0 +1,46 @@
+.report-page {
+  padding: 2rem;
+}
+
+.report-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.report-page__eyebrow {
+  margin: 0 0 0.5rem;
+  color: #9a9a9a;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+}
+
+.report-page h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.report-page__total {
+  min-width: 12rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.report-page__total span {
+  display: block;
+  color: #a2a2a2;
+  margin-bottom: 0.35rem;
+}
+
+.report-page__total strong {
+  font-size: 1.8rem;
+}
+
+.report-table {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+}

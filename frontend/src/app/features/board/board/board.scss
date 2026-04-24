@@ -1,0 +1,215 @@
+.board-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  min-height: 100vh;
+}
+
+.board-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.board-page__eyebrow {
+  margin: 0 0 0.5rem;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.board-page h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  background: linear-gradient(90deg, #f8fafc 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.board-page__copy {
+  max-width: 40rem;
+  margin: 0.85rem 0 0;
+  color: #94a3b8;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.board-page__loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+  color: #cbd5e1;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(18rem, 1fr));
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 2rem;
+}
+
+.board-column {
+  min-height: 36rem;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.board-column:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.board-column__header {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 0 0;
+  background: rgba(15, 23, 42, 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.board-column__header strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  margin-left: 0.6rem;
+  color: white;
+  background: var(--column-accent);
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.board-column__label {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.board-column__label::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--column-accent);
+  border-radius: 50%;
+}
+
+.board-column__list {
+  min-height: 28rem;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 0 0 12px 12px;
+}
+
+.task-card {
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid var(--column-accent);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.task-card.cdk-drag-preview {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transform: rotate(2deg);
+}
+
+.task-card.cdk-drag-placeholder {
+  opacity: 0.3;
+}
+
+.task-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.task-card dl {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.task-card dt {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.task-card dd {
+  margin: 0.15rem 0 0;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.task-card dd:empty::before {
+  content: '—';
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .board-page {
+    padding: 1rem;
+  }
+
+  .board-page__header {
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .board-columns {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .board-column {
+    min-height: 30rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .board-columns {
+    grid-template-columns: 1fr;
+  }
+}

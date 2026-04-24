@@ -1,0 +1,11 @@
+<div class="app-shell">
+  <app-navbar *ngIf="showNavbar"></app-navbar>
+
+  <main class="app-shell__content" [class.app-shell__content--auth]="!showNavbar">
+    <div class="app-shell__loading" *ngIf="!isBootstrapped">
+      <mat-spinner diameter="44"></mat-spinner>
+    </div>
+
+    <router-outlet *ngIf="isBootstrapped"></router-outlet>
+  </main>
+</div>

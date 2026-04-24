@@ -1,0 +1,27 @@
+<section class="auth-page">
+  <div class="auth-page__panel">
+    <p class="auth-page__eyebrow">New Account</p>
+    <h1>Create your VibeFlow access</h1>
+    <p class="auth-page__copy">
+      Register once and step directly into the shared Kanban board with the rest of the team.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+
+      <button mat-flat-button class="auth-form__submit" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating...' : 'Register' }}
+      </button>
+    </form>
+
+    <a class="auth-page__link" routerLink="/login">Already have an account?</a>
+  </div>
+</section>

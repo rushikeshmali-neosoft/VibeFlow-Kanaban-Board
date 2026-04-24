@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: vibeflow-kanban
+  
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/vibeflow_db}
+    username: ${DB_USERNAME:vibeflow}
+    password: ${DB_PASSWORD:vibeflow}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+server:
+  port: 8080
+  
+  error:
+    include-message: always
+    include-binding-errors: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+logging:
+  level:
+    com.vibeflow: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+jwt:
+  secret: ${JWT_SECRET:change-this-secret-key-to-a-long-random-value-1234567890}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+cors:
+  allowed-origins: http://localhost:4200,http://localhost:3000
+  allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
