@@ -1,3 +1,8 @@
+// Sidebar width tokens — must match sidebar.scss values
+$sidebar-expanded:  230px;
+$sidebar-collapsed:  56px;
+$transition: 260ms cubic-bezier(.4, 0, .2, 1);
+
 :host {
   display: flex;
   flex-direction: column;
@@ -8,30 +13,36 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--color-background, #f8f9fc);
+  background: var(--color-background, #f7f8fa);
 }
 
+// ── Body row (sidebar + content) ──────────────────────────────
 .app-shell__body {
   display: flex;
   flex: 1;
   min-height: calc(100vh - var(--header-height, 64px));
 
+  // Auth layout (login / register)
   &--auth {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #f8f9fc 0%, #eef0f8 100%);
+    background: #f7f8fa;
   }
 }
 
+// ── Main content area ─────────────────────────────────────────
 .app-shell__content {
   flex: 1;
   min-width: 0;
   overflow-x: auto;
   position: relative;
-  background: var(--color-background, #f8f9fc);
+  background: var(--color-background, #f7f8fa);
+  // Smooth shift when sidebar toggles
+  transition: margin-left $transition;
 }
 
+// ── Loading overlay ───────────────────────────────────────────
 .app-shell__loading {
   position: absolute;
   inset: 0;
@@ -45,7 +56,7 @@
 
   p {
     font-size: 13px;
-    color: var(--color-text-muted, #9da3b4);
+    color: #999;
     font-family: 'Inter', sans-serif;
     margin: 0;
   }

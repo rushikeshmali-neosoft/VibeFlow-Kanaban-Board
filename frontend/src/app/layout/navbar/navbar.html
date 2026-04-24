@@ -1,7 +1,19 @@
 <header class="vf-header">
 
-  <!-- ── Left: Brand + Search ─────────────────────────────── -->
+  <!-- ── Left: Hamburger + Brand + Search ────────────────────── -->
   <div class="vf-header__left">
+
+    <!-- Sidebar toggle (hamburger) -->
+    <button
+      class="vf-header__hamburger"
+      (click)="toggleSidebar()"
+      matTooltip="Toggle sidebar"
+      type="button"
+      id="sidebar-hamburger-btn"
+      aria-label="Toggle sidebar"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
 
     <!-- Brand -->
     <a class="vf-header__brand" routerLink="/board" aria-label="VibeFlow home">

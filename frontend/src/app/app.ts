@@ -1,10 +1,11 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
-import { bufferTime, filter, map } from 'rxjs';
+import { Observable, bufferTime, filter, map } from 'rxjs';
 import { BoardStateService } from './core/services/board-state';
 import { AuthService } from './core/services/auth';
 import { WebsocketService } from './core/services/websocket';
+import { SidebarStateService } from './core/services/sidebar-state';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { WebsocketService } from './core/services/websocket';
 export class App implements OnInit {
   isBootstrapped = false;
   currentUrl = '';
+  readonly sidebarCollapsed$: Observable<boolean>;
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(
@@ -22,7 +24,9 @@ export class App implements OnInit {
     private readonly router: Router,
     private readonly websocketService: WebsocketService,
     private readonly boardStateService: BoardStateService,
+    private readonly sidebarStateService: SidebarStateService,
   ) {
+    this.sidebarCollapsed$ = this.sidebarStateService.collapsed$;
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {

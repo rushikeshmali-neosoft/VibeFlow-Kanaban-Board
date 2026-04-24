@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SidebarStateService } from '../../core/services/sidebar-state';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,26 +9,39 @@ import { Router } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
-export class Sidebar {
+export class Sidebar implements OnInit {
   menuItems = [
-    { label: 'Board', icon: 'dashboard', route: '/board', active: false },
+    { label: 'Board',        icon: 'dashboard', route: '/board',        active: false },
     { label: 'Time Reports', icon: 'bar_chart', route: '/reports/time', active: false },
-    { label: 'Teams', icon: 'groups', route: '/teams', active: false },
+    { label: 'Teams',        icon: 'groups',    route: '/teams',        active: false },
   ];
 
-  constructor(private router: Router) {
+  readonly collapsed$: Observable<boolean>;
+
+  constructor(
+    private readonly router: Router,
+    private readonly sidebarState: SidebarStateService,
+  ) {
+    this.collapsed$ = this.sidebarState.collapsed$;
+  }
+
+  ngOnInit(): void {
     this.updateActiveState();
     this.router.events.subscribe(() => this.updateActiveState());
   }
 
-  private updateActiveState(): void {
-    const currentRoute = this.router.url;
-    this.menuItems.forEach(item => {
-      item.active = currentRoute.startsWith(item.route);
-    });
+  toggle(): void {
+    this.sidebarState.toggle();
   }
 
   navigate(route: string): void {
     this.router.navigate([route]);
+  }
+
+  private updateActiveState(): void {
+    const current = this.router.url;
+    this.menuItems.forEach(item => {
+      item.active = current.startsWith(item.route);
+    });
   }
 }

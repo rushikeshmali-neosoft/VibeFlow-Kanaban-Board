@@ -23,6 +23,36 @@
     min-width: 0;
   }
 
+  // ── Hamburger toggle ───────────────────────────────────────
+  &__hamburger {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    margin-right: 4px;
+    transition: background 120ms ease, color 120ms ease;
+
+    mat-icon {
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    &:hover {
+      background: #f3f4f6;
+      color: #111;
+    }
+
+    &:active { background: #e5e7eb; }
+  }
+
   // ── Brand ─────────────────────────────────────────────────
   &__brand {
     display: flex;

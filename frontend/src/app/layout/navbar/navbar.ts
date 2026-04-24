@@ -6,6 +6,7 @@ import { UserModel } from '../../core/models/user.model';
 import { AuthService } from '../../core/services/auth';
 import { TaskDialog } from '../../features/task/task-dialog/task-dialog';
 import { TaskModel } from '../../core/models/task.model';
+import { SidebarStateService } from '../../core/services/sidebar-state';
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +21,7 @@ export class Navbar {
     private readonly authService: AuthService,
     private readonly router: Router,
     private readonly dialog: MatDialog,
+    private readonly sidebarState: SidebarStateService,
   ) {
     this.currentUser$ = this.authService.currentUser$;
   }
@@ -43,6 +45,10 @@ export class Navbar {
       .split(/[._-]/)
       .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
       .join(' ');
+  }
+
+  toggleSidebar(): void {
+    this.sidebarState.toggle();
   }
 
   logout(): void {

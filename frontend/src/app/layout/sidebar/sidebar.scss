@@ -1,8 +1,13 @@
-/* ── VibeFlow Sidebar – Black & White ───────────────────────── */
+/* ── VibeFlow Sidebar – collapsible B&W ─────────────────────── */
+
+// Width tokens
+$sidebar-expanded:  230px;
+$sidebar-collapsed:  56px;
+$transition: 260ms cubic-bezier(.4, 0, .2, 1);
 
 .sidebar {
-  width: var(--sidebar-width, 230px);
-  min-width: var(--sidebar-width, 230px);
+  width: $sidebar-expanded;
+  min-width: $sidebar-expanded;
   min-height: calc(100vh - var(--header-height, 64px));
   background: #fff;
   border-right: 1px solid #e5e7eb;
@@ -11,18 +16,58 @@
   position: sticky;
   top: var(--header-height, 64px);
   align-self: flex-start;
+  overflow: hidden;
 
+  // Smooth width + content transition
+  transition: width $transition, min-width $transition;
+
+  // ── Collapsed state ─────────────────────────────────────
+  &--collapsed {
+    width: $sidebar-collapsed;
+    min-width: $sidebar-collapsed;
+
+    // Hide text labels
+    .sidebar__logo-text,
+    .sidebar__menu-label,
+    .sidebar__active-bar { display: none; }
+
+    // Hide the toggle button label text, keep icon centred
+    .sidebar__logo-area {
+      justify-content: center;
+      padding: 14px 0;
+    }
+
+    .sidebar__menu-item {
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    .sidebar__logo-icon { margin: 0; }
+
+    // Move toggle button to bottom of logo area when collapsed
+    .sidebar__toggle-btn {
+      position: static;
+      margin-left: 0;
+      margin-top: 8px;
+    }
+  }
+
+  // ── Logo row ────────────────────────────────────────────
   &__logo-area {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 16px 16px 14px;
+    padding: 14px 12px;
     border-bottom: 1px solid #f0f1f3;
+    transition: padding $transition, justify-content $transition;
+    min-height: 58px;
+    position: relative;
   }
 
   &__logo-icon {
     width: 32px;
     height: 32px;
+    min-width: 32px;
     border-radius: 8px;
     background: #111;
     display: flex;
@@ -42,7 +87,11 @@
     display: flex;
     flex-direction: column;
     line-height: 1.2;
+    flex: 1;
     min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: opacity $transition;
   }
 
   &__app-name {
@@ -56,11 +105,44 @@
     font-size: 10px;
     color: #999;
     font-weight: 500;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  // ── Toggle button ────────────────────────────────────────
+  &__toggle-btn {
+    flex-shrink: 0;
+    margin-left: auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    transition: background var(--transition-fast, 120ms), color var(--transition-fast, 120ms),
+                border-color var(--transition-fast, 120ms), transform $transition;
+
+    &:hover {
+      background: #f3f4f6;
+      border-color: #ccc;
+      color: #111;
+    }
+
+    &:active { transform: scale(0.92); }
+  }
+
+  &__toggle-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+    transition: transform $transition;
+  }
+
+  // ── Menu ─────────────────────────────────────────────────
   &__menu {
     list-style: none;
     padding: 8px;
@@ -81,7 +163,10 @@
     font-size: 13.5px;
     font-weight: 500;
     color: #555;
-    transition: background var(--transition-fast, 120ms), color var(--transition-fast, 120ms);
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background var(--transition-fast, 120ms), color var(--transition-fast, 120ms),
+                padding $transition, justify-content $transition;
     user-select: none;
 
     &:hover:not(.sidebar__menu-item--active) {
@@ -100,9 +185,9 @@
     font-size: 18px !important;
     width: 18px !important;
     height: 18px !important;
-    color: inherit;
     flex-shrink: 0;
-    opacity: 0.8;
+    color: inherit;
+    opacity: 0.85;
 
     .sidebar__menu-item--active & { opacity: 1; }
   }
@@ -110,9 +195,11 @@
   &__menu-label {
     flex: 1;
     line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity $transition;
   }
 
-  /* Active indicator bar on the left edge */
   &__active-bar {
     position: absolute;
     left: 0;
