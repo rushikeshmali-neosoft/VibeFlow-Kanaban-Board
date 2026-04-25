@@ -1,27 +1,101 @@
-<section class="auth-page">
-  <div class="auth-page__panel">
-    <p class="auth-page__eyebrow">Shared Workspace</p>
-    <h1>Sign in to VibeFlow</h1>
-    <p class="auth-page__copy">
-      One board, one flow, real-time task movement across the whole team.
-    </p>
+<div class="auth-shell">
+  <div class="auth-card">
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" />
-      </mat-form-field>
+    <!-- ── Left illustration panel ─────────────────────────── -->
+    <div class="auth-card__left">
+      <div class="auth-card__illustration">
+        <!-- Document / board icon -->
+        <div class="auth-illus__doc">
+          <div class="auth-illus__doc-line"></div>
+          <div class="auth-illus__doc-line auth-illus__doc-line--short"></div>
+          <div class="auth-illus__doc-line auth-illus__doc-line--short"></div>
+        </div>
+        <!-- Person silhouette -->
+        <div class="auth-illus__person">
+          <div class="auth-illus__head"></div>
+          <div class="auth-illus__body"></div>
+        </div>
+        <!-- Decorative bar -->
+        <div class="auth-illus__bar"></div>
+      </div>
+      <p class="auth-card__left-caption">VibeFlow Enterprise</p>
+    </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
-      </mat-form-field>
+    <!-- ── Right form panel ────────────────────────────────── -->
+    <div class="auth-card__right">
 
-      <button mat-flat-button class="auth-form__submit" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Signing In...' : 'Login' }}
-      </button>
-    </form>
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <span class="auth-tabs__tab auth-tabs__tab--active" id="login-tab">Sign In</span>
+        <a class="auth-tabs__tab" routerLink="/register" id="goto-register-link">Sign Up</a>
+      </div>
 
-    <a class="auth-page__link" routerLink="/register">Create a new account</a>
+      <h2 class="auth-card__title">Sign In</h2>
+      <p class="auth-card__subtitle">Enter your credentials to access your workspace.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form" autocomplete="on" novalidate>
+
+        <!-- Email -->
+        <div class="auth-field">
+          <input
+            id="login-email"
+            class="auth-field__input"
+            type="email"
+            formControlName="email"
+            placeholder="Username or email"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="auth-field auth-field--with-action">
+          <input
+            id="login-password"
+            class="auth-field__input"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Password"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="auth-field__toggle"
+            (click)="togglePassword()"
+            id="login-password-toggle"
+          >{{ showPassword ? 'Hide' : 'Show' }}</button>
+        </div>
+
+        <!-- Remember me + Forgot password row -->
+        <div class="auth-row">
+          <label class="auth-checkbox" id="remember-me-label">
+            <input type="checkbox" id="login-remember" /> Remember me
+          </label>
+          <a class="auth-link" routerLink="/login" id="forgot-password-link">Forgot Password</a>
+        </div>
+
+        <!-- Submit -->
+        <button
+          class="auth-btn"
+          type="submit"
+          id="login-submit-btn"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? 'Signing In…' : 'LOG IN' }}
+        </button>
+
+      </form>
+
+      <!-- Social divider -->
+      <div class="auth-divider">
+        <span>or login with</span>
+      </div>
+
+      <div class="auth-social">
+        <button class="auth-social__btn" type="button" id="login-fb-btn" title="Facebook">f</button>
+        <button class="auth-social__btn" type="button" id="login-tw-btn" title="Twitter">t</button>
+        <button class="auth-social__btn" type="button" id="login-g-btn"  title="Google">G</button>
+      </div>
+
+    </div>
   </div>
-</section>
+</div>

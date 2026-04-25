@@ -1,27 +1,103 @@
-<section class="auth-page">
-  <div class="auth-page__panel">
-    <p class="auth-page__eyebrow">New Account</p>
-    <h1>Create your VibeFlow access</h1>
-    <p class="auth-page__copy">
-      Register once and step directly into the shared Kanban board with the rest of the team.
-    </p>
+<div class="auth-shell">
+  <div class="auth-card">
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" />
-      </mat-form-field>
+    <!-- ── Left illustration panel ─────────────────────────── -->
+    <div class="auth-card__left">
+      <div class="auth-card__illustration">
+        <div class="auth-illus__doc">
+          <div class="auth-illus__doc-line"></div>
+          <div class="auth-illus__doc-line auth-illus__doc-line--short"></div>
+          <div class="auth-illus__doc-line auth-illus__doc-line--short"></div>
+        </div>
+        <div class="auth-illus__person">
+          <div class="auth-illus__head"></div>
+          <div class="auth-illus__body"></div>
+        </div>
+        <div class="auth-illus__bar"></div>
+      </div>
+      <p class="auth-card__left-caption">VibeFlow Enterprise</p>
+    </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
-      </mat-form-field>
+    <!-- ── Right form panel ────────────────────────────────── -->
+    <div class="auth-card__right">
 
-      <button mat-flat-button class="auth-form__submit" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Creating...' : 'Register' }}
-      </button>
-    </form>
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <a class="auth-tabs__tab" routerLink="/login" id="goto-login-link">Sign In</a>
+        <span class="auth-tabs__tab auth-tabs__tab--active" id="register-tab">Sign Up</span>
+      </div>
 
-    <a class="auth-page__link" routerLink="/login">Already have an account?</a>
+      <h2 class="auth-card__title">Sign Up</h2>
+      <p class="auth-card__subtitle">Create your account and start managing your workspace quickly.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form" autocomplete="on" novalidate>
+
+        <!-- Email -->
+        <div class="auth-field">
+          <input
+            id="register-email"
+            class="auth-field__input"
+            type="email"
+            formControlName="email"
+            placeholder="Email address"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="auth-field auth-field--with-action">
+          <input
+            id="register-password"
+            class="auth-field__input"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Password"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="auth-field__toggle"
+            (click)="togglePassword()"
+            id="register-password-toggle"
+          >{{ showPassword ? 'Hide' : 'Show' }}</button>
+        </div>
+
+        <!-- Confirm password (UI only — not wired to the form validator per existing API) -->
+        <div class="auth-field auth-field--with-action">
+          <input
+            id="register-confirm"
+            class="auth-field__input"
+            [type]="showConfirm ? 'text' : 'password'"
+            placeholder="Confirm password"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="auth-field__toggle"
+            (click)="toggleConfirm()"
+            id="register-confirm-toggle"
+          >{{ showConfirm ? 'Hide' : 'Show' }}</button>
+        </div>
+
+        <!-- Terms checkbox -->
+        <label class="auth-checkbox auth-checkbox--terms" id="terms-label">
+          <input type="checkbox" id="register-terms" />
+          I agree to <a class="auth-link auth-link--inline" href="#" id="terms-link">terms</a>
+          and <a class="auth-link auth-link--inline" href="#" id="privacy-link">privacy policy</a>.
+        </label>
+
+        <!-- Submit -->
+        <button
+          class="auth-btn"
+          type="submit"
+          id="register-submit-btn"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? 'Creating Account…' : 'CREATE ACCOUNT' }}
+        </button>
+
+      </form>
+
+    </div>
   </div>
-</section>
+</div>

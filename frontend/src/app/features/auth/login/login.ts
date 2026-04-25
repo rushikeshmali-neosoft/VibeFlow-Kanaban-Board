@@ -12,6 +12,8 @@ import { AuthService } from '../../../core/services/auth';
 })
 export class Login {
   isSubmitting = false;
+  showPassword = false;
+
   private readonly formBuilder = inject(FormBuilder);
 
   readonly form = this.formBuilder.group({
@@ -23,6 +25,10 @@ export class Login {
     private readonly authService: AuthService,
     private readonly router: Router,
   ) {}
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   submit(): void {
     if (this.form.invalid) {
