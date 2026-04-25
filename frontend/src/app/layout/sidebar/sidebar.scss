@@ -8,15 +8,14 @@ $transition: 260ms cubic-bezier(.4, 0, .2, 1);
 .sidebar {
   width: $sidebar-expanded;
   min-width: $sidebar-expanded;
-  min-height: calc(100vh - var(--header-height, 64px));
+  height: 100%;          // fills the fixed-height app-shell__body exactly
   background: #fff;
   border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: var(--header-height, 64px);
-  align-self: flex-start;
-  overflow: hidden;
+  overflow-y: auto;      // sidebar itself can scroll if items overflow
+  overflow-x: hidden;
+  flex-shrink: 0;        // never shrink when content pane grows
 
   // Smooth width + content transition
   transition: width $transition, min-width $transition;
@@ -43,13 +42,6 @@ $transition: 260ms cubic-bezier(.4, 0, .2, 1);
     }
 
     .sidebar__logo-icon { margin: 0; }
-
-    // Move toggle button to bottom of logo area when collapsed
-    .sidebar__toggle-btn {
-      position: static;
-      margin-left: 0;
-      margin-top: 8px;
-    }
   }
 
   // ── Logo row ────────────────────────────────────────────

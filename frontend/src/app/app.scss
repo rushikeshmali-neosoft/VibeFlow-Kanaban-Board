@@ -3,42 +3,56 @@ $sidebar-expanded:  230px;
 $sidebar-collapsed:  56px;
 $transition: 260ms cubic-bezier(.4, 0, .2, 1);
 
+// ── Host (app-root) ────────────────────────────────────────────
+// Must be a flex column that fills exactly the viewport —
+// the page itself must NEVER scroll.
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
+// ── App shell ─────────────────────────────────────────────────
 .app-shell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;         // locked to viewport — no document scroll
+  overflow: hidden;
   background: var(--color-background, #f7f8fa);
 }
 
 // ── Body row (sidebar + content) ──────────────────────────────
+// flex: 1 fills remaining height after the sticky header.
+// overflow: hidden keeps the body from growing and breaking sticky.
+// min-height: 0 is required so flex children can shrink below content size.
 .app-shell__body {
   display: flex;
   flex: 1;
-  min-height: calc(100vh - var(--header-height, 64px));
+  overflow: hidden;   // ← critical: stops document-level scrolling
+  min-height: 0;      // ← critical: allows flex children to shrink
 
-  // Auth layout (login / register)
+  // Auth layout (login / register — no sidebar, centred form)
   &--auth {
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    background: #f7f8fa;
+    overflow: auto;         // auth pages may be taller on small screens
+    min-height: 0;
+    background: #ebebeb;
   }
 }
 
 // ── Main content area ─────────────────────────────────────────
+// This is the ONLY element that scrolls — isolates scrolling from
+// the header and sidebar so they always stay visually anchored.
 .app-shell__content {
   flex: 1;
   min-width: 0;
+  min-height: 0;       // allow shrinking
+  overflow-y: auto;    // content scrolls independently
   overflow-x: auto;
   position: relative;
   background: var(--color-background, #f7f8fa);
-  // Smooth shift when sidebar toggles
   transition: margin-left $transition;
 }
 
