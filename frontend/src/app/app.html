@@ -9,7 +9,7 @@
   >
     <app-sidebar *ngIf="showNavbar"></app-sidebar>
 
-    <main class="app-shell__content" role="main">
+    <main class="app-shell__content" role="main" cdkScrollable>
       <!-- Full-screen loading overlay while session is being restored -->
       <div class="app-shell__loading" *ngIf="!isBootstrapped">
         <mat-spinner diameter="36"></mat-spinner>
