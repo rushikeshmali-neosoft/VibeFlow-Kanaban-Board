@@ -135,10 +135,11 @@
   transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms;
   position: relative;
 
-  // Fade-in when card enters the DOM
-  animation: fadeIn 0.3s ease-in;
+  &:not(.cdk-drag-preview) {
+    animation: fadeIn 0.3s ease-in;
+  }
 
-  &:hover {
+  &:not(.cdk-drag-preview):hover {
     box-shadow: 0 4px 14px rgba(0,0,0,0.09);
     transform: translateY(-1px);
     border-color: #ccc;
@@ -146,7 +147,8 @@
 
   &.cdk-drag-preview {
     box-shadow: 0 14px 40px rgba(0,0,0,0.16);
-    transform: rotate(1.5deg) scale(1.02);
+    animation: none;
+    transition: none;
   }
 
   &.cdk-drag-placeholder {

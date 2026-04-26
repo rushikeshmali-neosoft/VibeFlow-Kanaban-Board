@@ -61,6 +61,24 @@ export class AuthService {
       );
   }
 
+  forgotPassword(email: string): Observable<void> {
+    return this.http
+      .post<ApiResponse<void>>(`${environment.apiBaseUrl}/auth/forgot-password`, { email })
+      .pipe(map((response) => response.data));
+  }
+
+  verifyOtp(email: string, otp: string): Observable<void> {
+    return this.http
+      .post<ApiResponse<void>>(`${environment.apiBaseUrl}/auth/verify-otp`, { email, otp })
+      .pipe(map((response) => response.data));
+  }
+
+  resetPassword(email: string, otp: string, newPassword: string): Observable<void> {
+    return this.http
+      .post<ApiResponse<void>>(`${environment.apiBaseUrl}/auth/reset-password`, { email, otp, newPassword })
+      .pipe(map((response) => response.data));
+  }
+
   logout(callApi = true): void {
     if (callApi && this.getToken()) {
       this.http.post<ApiResponse<void>>(`${environment.apiBaseUrl}/auth/logout`, {}).subscribe({

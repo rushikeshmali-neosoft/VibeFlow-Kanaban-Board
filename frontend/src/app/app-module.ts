@@ -30,12 +30,13 @@ import { Register } from './features/auth/register/register';
 import { Board } from './features/board/board/board';
 import { TimeReport } from './features/report/time-report/time-report';
 import { TaskDialog } from './features/task/task-dialog/task-dialog';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 import { Navbar } from './layout/navbar/navbar';
 import { Sidebar } from './layout/sidebar/sidebar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [App, Navbar, Sidebar, Login, Register, Board, TimeReport, TaskDialog],
+  declarations: [App, Navbar, Sidebar, Login, Register, ForgotPassword, Board, TimeReport, TaskDialog],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -19,6 +19,18 @@ spring:
         format_sql: true
     show-sql: false   # set to true for debugging only; avoid in production
 
+  mail:
+    host: ${MAIL_HOST:smtp.mailtrap.io}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USERNAME:your_mailtrap_user}
+    password: ${MAIL_PASSWORD:your_mailtrap_pass}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 server:
   port: 8080
 

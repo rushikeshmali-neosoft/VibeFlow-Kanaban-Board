@@ -6,10 +6,13 @@ import { Register } from './features/auth/register/register';
 import { Board } from './features/board/board/board';
 import { TimeReport } from './features/report/time-report/time-report';
 
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
+
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'board' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'forgot-password', component: ForgotPassword },
   { path: 'board', component: Board, canActivate: [authGuard] },
   { path: 'reports/time', component: TimeReport, canActivate: [authGuard] },
   { path: '**', redirectTo: 'board' },

@@ -71,6 +71,30 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Request password reset OTP")
+    public ResponseEntity<ApiResponse<Void>> forgotPassword(
+            @Valid @RequestBody com.vibeflow.auth.dto.ForgotPasswordRequest request) {
+        authService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success("If the email is registered, an OTP has been sent.", null));
+    }
+
+    @PostMapping("/verify-otp")
+    @Operation(summary = "Verify OTP for password reset")
+    public ResponseEntity<ApiResponse<Void>> verifyOtp(
+            @Valid @RequestBody com.vibeflow.auth.dto.VerifyOtpRequest request) {
+        authService.verifyOtp(request.getEmail(), request.getOtp());
+        return ResponseEntity.ok(ApiResponse.success("OTP verified successfully", null));
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password using OTP")
+    public ResponseEntity<ApiResponse<Void>> resetPassword(
+            @Valid @RequestBody com.vibeflow.auth.dto.ResetPasswordRequest request) {
+        authService.resetPassword(request.getEmail(), request.getOtp(), request.getNewPassword());
+        return ResponseEntity.ok(ApiResponse.success("Password reset successfully", null));
+    }
+
     // ── Helpers ───────────────────────────────────────────────
 
     private String extractBearerToken(HttpServletRequest request) {

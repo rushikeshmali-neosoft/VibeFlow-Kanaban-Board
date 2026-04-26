@@ -70,7 +70,8 @@ export class App implements OnInit {
     return (
       this.authService.isAuthenticated() &&
       !this.currentUrl.startsWith('/login') &&
-      !this.currentUrl.startsWith('/register')
+      !this.currentUrl.startsWith('/register') &&
+      !this.currentUrl.startsWith('/forgot-password')
     );
   }
 }

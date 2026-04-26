@@ -31,6 +31,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenBlacklistService tokenBlacklistService;
     private final UserMapper userMapper;
+    private final EmailService emailService;
+    private final OtpService otpService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -93,5 +95,43 @@ public class AuthService {
     public void logout(String rawToken, String userEmail) {
         tokenBlacklistService.blacklist(rawToken, userEmail);
         log.info("User {} logged out; token invalidated in blacklist", userEmail);
+    }
+
+    @Transactional
+    public void forgotPassword(String email) {
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(normalizedEmail)
+                .orElseThrow(() -> new ValidationException("User not found with email: " + normalizedEmail));
+
+        String otp = otpService.generateOtp(user);
+        emailService.sendOtpEmail(user.getEmail(), otp);
+        log.info("OTP sent to {}", user.getEmail());
+    }
+
+    @Transactional(readOnly = true)
+    public void verifyOtp(String email, String otp) {
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(normalizedEmail)
+                .orElseThrow(() -> new ValidationException("User not found"));
+
+        if (!otpService.validateOtp(otp, user)) {
+            throw new ValidationException("Invalid or expired OTP");
+        }
+    }
+
+    @Transactional
+    public void resetPassword(String email, String otp, String newPassword) {
+        String normalizedEmail = email.trim().toLowerCase();
+        User user = userRepository.findByEmailIgnoreCase(normalizedEmail)
+                .orElseThrow(() -> new ValidationException("User not found"));
+
+        if (!otpService.validateOtp(otp, user)) {
+            throw new ValidationException("Invalid or expired OTP");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        otpService.clearOtp(user);
+        log.info("Password reset successful for {}", user.getEmail());
     }
 }
