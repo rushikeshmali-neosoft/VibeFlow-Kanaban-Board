@@ -65,10 +65,6 @@
   flex-direction: column;
   min-height: 420px;
   transition: box-shadow 150ms ease;
-
-  &:has(.cdk-drop-list-receiving) {
-    box-shadow: 0 0 0 2px #111, 0 4px 12px rgba(0,0,0,0.08);
-  }
 }
 
 .board-column__header {

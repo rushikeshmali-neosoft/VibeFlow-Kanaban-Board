@@ -41,7 +41,13 @@ export class Login {
       .login(this.form.getRawValue() as { email: string; password: string })
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe(() => {
-        this.authService.restoreSession().subscribe(() => this.router.navigate(['/board']));
+        this.authService.restoreSession().subscribe((user) => {
+          if (user && user.role === 'ROLE_ADMIN') {
+            this.router.navigate(['/admin/dashboard']);
+          } else {
+            this.router.navigate(['/board']);
+          }
+        });
       });
   }
 }

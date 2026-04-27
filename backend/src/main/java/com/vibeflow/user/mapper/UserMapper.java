@@ -11,6 +11,11 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        return new UserDTO(user.getId(), user.getEmail());
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+        dto.setActive(user.getIsActive());
+        return dto;
     }
 }

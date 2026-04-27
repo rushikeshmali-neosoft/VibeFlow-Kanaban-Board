@@ -31,12 +31,14 @@ import { Board } from './features/board/board/board';
 import { TimeReport } from './features/report/time-report/time-report';
 import { TaskDialog } from './features/task/task-dialog/task-dialog';
 import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
+import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
 import { Navbar } from './layout/navbar/navbar';
 import { Sidebar } from './layout/sidebar/sidebar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [App, Navbar, Sidebar, Login, Register, ForgotPassword, Board, TimeReport, TaskDialog],
+  declarations: [App, Navbar, Sidebar, Login, Register, ForgotPassword, AdminDashboard, Board, TimeReport, TaskDialog],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -61,6 +63,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    FormsModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

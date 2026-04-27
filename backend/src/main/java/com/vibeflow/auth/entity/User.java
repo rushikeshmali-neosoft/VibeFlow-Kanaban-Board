@@ -27,7 +27,21 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
     
+    @Column(name = "role")
+    private String role = "ROLE_USER";
+    
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+    
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    
+    public String getRole() {
+        return role != null ? role : "ROLE_USER";
+    }
+    
+    public Boolean getIsActive() {
+        return isActive != null ? isActive : true;
+    }
 }

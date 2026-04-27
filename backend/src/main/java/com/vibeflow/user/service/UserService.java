@@ -6,6 +6,8 @@ import com.vibeflow.common.exception.NotFoundException;
 import com.vibeflow.user.dto.UserDTO;
 import com.vibeflow.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +18,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     
+
+    @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
     private final UserMapper userMapper;
     
     @Transactional(readOnly = true)

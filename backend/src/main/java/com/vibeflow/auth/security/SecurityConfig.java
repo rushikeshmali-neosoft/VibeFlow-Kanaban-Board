@@ -69,6 +69,7 @@ public class SecurityConfig {
                 // WebSocket handshake
                 .requestMatchers("/ws", "/ws/**").permitAll()
                 // /api/auth/logout requires a valid token so we can blacklist it
+                .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
                 // All other requests must be authenticated
                 .anyRequest().authenticated()
             )
